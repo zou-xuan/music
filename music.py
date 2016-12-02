@@ -3,6 +3,8 @@ from pydub import AudioSegment
 from os import listdir, remove
 import os
 import numpy as np
+import matplotlib.pyplot as plt
+from scipy.io.wavfile import read
 
 
 def split(path, filename, period=5):
@@ -28,14 +30,14 @@ def splitToTxt(path, filename):
     rate = Wav.rate
     sampelwidth = Wav.sampwidth
     lineWidth = 50
-    f = open('txt/'+filename[0:-4]+'.txt', 'w')
+    f = open('txt/' + filename[0:-4] + '.txt', 'w')
     print filename[0:-4]
     for i in range(0, array.shape[0], 50):
         end = array.shape[0] if i + 50 > array.shape[0] else i + 50
         tmp = array[i:end, 0]
         str_ = ' '.join([str(t) for t in tmp])
         # print str_
-        f.write(str_+'\n')
+        f.write(str_ + '\n')
     f.close()
 
 
@@ -90,10 +92,27 @@ def mixNonVoice(path):
     mix(files, 'nonvoice.wav')
 
 
+def drawWAVPic(filename):
+    # spf = wave.open(filename, 'r')
+    # signal = spf.readframes(-1)
+    # signal = np.fromstring(signal, 'Int16')
+    # fs = spf.getframerate()
+    # Time = np.linspace(0, len(signal) / fs, num=len(signal))
+    # print len(Time)
+    #
+    # plt.title('Signal Wave...')
+    # plt.plot(signal)
+    # plt.show()
+    (fs,x)=read(filename)
+    plt.plot(x)
+    plt.show()
+
+
 if __name__ == "__main__":
     # mixVoice('source/')
     # mixNonVoice('source/')
     # split('mix/','voice.wav')
     # split('mix/','nonvoice.wav')
-    splitToTxt('mix/', 'voice.wav')
-    splitToTxt('mix/','nonvoice.wav')
+    # splitToTxt('mix/', 'voice.wav')
+    # splitToTxt('mix/','nonvoice.wav')
+    drawWAVPic('output/voice.wav_split_0.wav')
